@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">r2dii.match</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.7</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.10</span>
       </span>
     </div>
 
@@ -120,8 +120,7 @@
 
       
 
-      </header><script src="matching-coverage_files/header-attrs-2.5/header-attrs.js"></script><link href="matching-coverage_files/anchor-sections-1.0/anchor-sections.css" rel="stylesheet">
-<script src="matching-coverage_files/anchor-sections-1.0/anchor-sections.js"></script><div class="row">
+      </header><script src="matching-coverage_files/header-attrs-2.9/header-attrs.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Calculating Matching Coverage</h1>
@@ -134,7 +133,7 @@
 
     
     
-<p><code>r2dii.match</code> allows you to match loans from your loanbook to the companies in an asset-level dataset. However, matching every loan is unlikely – some loan-taking companies may be missing from the asset-level dataset, or they may not operate in the sectors 2DII focuses on (power, cement, oil and gas, shipping, aviation, coal, automotive, and steel). Thus, you may want to measure how much of the loanbook matched some asset. This article shows two ways to calculate such matching coverage:</p>
+<p><code>r2dii.match</code> allows you to match loans from your loanbook to the companies in an asset-level dataset. However, matching every loan is unlikely – some loan-taking companies may be missing from the asset-level dataset, or they may not operate in the sectors 2DII focuses on (power, cement, oil and gas, shipping, aviation, coal, automotive, steel, and hdv). Thus, you may want to measure how much of the loanbook matched some asset. This article shows two ways to calculate such matching coverage:</p>
 <ol style="list-style-type: decimal">
 <li><p>Calculate the portion of your loanbook covered, by dollar value (i.e. using one of the <code>loan_size_*</code> columns).</p></li>
 <li><p>Count the number of companies matched.</p></li>
@@ -146,7 +145,7 @@
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span>, warn.conflicts <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://purrr.tidyverse.org">purrr</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://2degreesinvesting.github.io/r2dii.data/">r2dii.data</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://2degreesinvesting.github.io/r2dii.match/">r2dii.match</a></span><span class="op">)</span></code></pre></div>
 <p>We will use example datasets from <code>r2dii.data</code>. To demonstrate our point, we create a <code>loanbook</code> dataset with two mismatching loans:</p>
@@ -216,16 +215,14 @@
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">coverage</span> <span class="op">%&gt;%</span> 
   <span class="fu">dollar_value</span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu">plot_coverage</span><span class="op">(</span><span class="va">matched</span>, <span class="va">loan_size_outstanding</span><span class="op">)</span>
-<span class="co">#&gt; `summarise()` ungrouping output (override with `.groups` argument)</span></code></pre></div>
+  <span class="fu">plot_coverage</span><span class="op">(</span><span class="va">matched</span>, <span class="va">loan_size_outstanding</span><span class="op">)</span></code></pre></div>
 <p><img src="matching-coverage_files/figure-html/unnamed-chunk-9-1.png" width="700"></p>
 <p>To calculate the total, in-scope, loanbook coverage:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">coverage</span> <span class="op">%&gt;%</span> 
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">sector</span> <span class="op">!=</span> <span class="st">"not in scope"</span><span class="op">)</span> <span class="op">%&gt;%</span> 
   <span class="fu">dollar_value</span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu">plot_coverage</span><span class="op">(</span><span class="va">matched</span>, <span class="va">loan_size_outstanding</span><span class="op">)</span>
-<span class="co">#&gt; `summarise()` ungrouping output (override with `.groups` argument)</span></code></pre></div>
+  <span class="fu">plot_coverage</span><span class="op">(</span><span class="va">matched</span>, <span class="va">loan_size_outstanding</span><span class="op">)</span></code></pre></div>
 <p><img src="matching-coverage_files/figure-html/unnamed-chunk-10-1.png" width="700"></p>
 </div>
 <div id="break-down-by-sector" class="section level3">
@@ -236,7 +233,7 @@
 <code class="sourceCode R"><span class="va">coverage</span> <span class="op">%&gt;%</span> 
   <span class="fu">dollar_value</span><span class="op">(</span><span class="va">sector</span><span class="op">)</span> <span class="op">%&gt;%</span> 
   <span class="fu">plot_coverage</span><span class="op">(</span><span class="va">sector</span>, <span class="va">loan_size_outstanding</span><span class="op">)</span>
-<span class="co">#&gt; `summarise()` regrouping output by 'matched' (override with `.groups` argument)</span></code></pre></div>
+<span class="co">#&gt; `summarise()` has grouped output by 'matched'. You can override using the `.groups` argument.</span></code></pre></div>
 <p><img src="matching-coverage_files/figure-html/unnamed-chunk-11-1.png" width="700"></p>
 <p>Or even further, by matching level:</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
@@ -250,7 +247,7 @@
   <span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
   <span class="fu">dollar_value</span><span class="op">(</span><span class="va">sector</span><span class="op">)</span> <span class="op">%&gt;%</span> 
   <span class="fu">plot_coverage</span><span class="op">(</span><span class="va">sector</span>, <span class="va">loan_size_outstanding</span><span class="op">)</span>
-<span class="co">#&gt; `summarise()` regrouping output by 'matched' (override with `.groups` argument)</span></code></pre></div>
+<span class="co">#&gt; `summarise()` has grouped output by 'matched'. You can override using the `.groups` argument.</span></code></pre></div>
 <p><img src="matching-coverage_files/figure-html/unnamed-chunk-12-1.png" width="700"></p>
 </div>
 <div id="count-the-number-of-companies" class="section level3">
@@ -261,7 +258,7 @@
 <code class="sourceCode R"><span class="va">companies_matched</span> <span class="op">&lt;-</span> <span class="va">coverage</span> <span class="op">%&gt;%</span> 
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">sector</span>, <span class="va">matched</span><span class="op">)</span> <span class="op">%&gt;%</span> 
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarize</a></span><span class="op">(</span>no_companies <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/n_distinct.html">n_distinct</a></span><span class="op">(</span><span class="va">name_direct_loantaker</span><span class="op">)</span><span class="op">)</span>
-<span class="co">#&gt; `summarise()` regrouping output by 'sector' (override with `.groups` argument)</span>
+<span class="co">#&gt; `summarise()` has grouped output by 'sector'. You can override using the `.groups` argument.</span>
 
 <span class="va">companies_matched</span> <span class="op">%&gt;%</span> 
   <span class="fu">plot_coverage</span><span class="op">(</span><span class="va">sector</span>, <span class="va">no_companies</span><span class="op">)</span></code></pre></div>
